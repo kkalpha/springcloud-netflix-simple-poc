@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Random;
+
 @RestController
 public class ServiceProviderController {
 
@@ -15,7 +17,17 @@ public class ServiceProviderController {
     @RequestMapping(value = "/service1", method = RequestMethod.GET)
     public String service1() throws Exception {
         logger.info("/service1");
-        return "service by service provider";
+        return "service1 by service provider";
+    }
+
+    @RequestMapping(value = "/badservice", method = RequestMethod.GET)
+    public String badservice() throws Exception {
+        logger.info("/badservice");
+        // 测试超时触发断路器
+		int sleepTime = new Random().nextInt(3000);
+		logger.info("sleepTime:" + sleepTime);
+		Thread.sleep(sleepTime);
+        return "service (bad service) by service provider";
     }
 
 }
